@@ -1,15 +1,23 @@
-const express = require('express');
+import express from 'express';
+import socket from './socket';
+import http from 'http';
+import socketIO from 'socket.io';
+
+import path from 'path';
+import webpack from 'webpack';
+import webpackConfig from '../config/webpack.config';
+import project from '../config/project.config';
+import compression from 'compression';
 const debug = require('debug')('app:server');
-const path = require('path');
-const webpack = require('webpack');
-const webpackConfig = require('../config/webpack.config');
-const project = require('../config/project.config');
-const compress = require('compression');
 
 const app = express();
+const server = http.Server(app);
+const io = socketIO(server);
+
+
 
 // Apply gzip compression
-app.use(compress());
+app.use(compression());
 
 // ------------------------------------
 // Apply Webpack HMR Middleware
@@ -60,4 +68,9 @@ if (project.env === 'development') {
   app.use(express.static(project.paths.dist()));
 }
 
-module.exports = app;
+server.listen(project.server_port);
+
+// Socket data
+io.on('connection', socket);
+debug(`Server is now running at http://localhost:${project.server_port}.`);
+
