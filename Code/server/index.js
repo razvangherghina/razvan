@@ -1,5 +1,5 @@
 import express from 'express';
-import socket from './socket';
+import model from './model';
 import http from 'http';
 import socketIO from 'socket.io';
 
@@ -71,6 +71,6 @@ if (project.env === 'development') {
 server.listen(project.server_port);
 
 // Socket data
-io.on('connection', socket);
+io.on('connection', model.onConnect);
 debug(`Server is now running at http://localhost:${project.server_port}.`);
 

@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import createStore from './store/createStore';
 import AppContainer from './containers/AppContainer';
 import io from 'socket.io-client';
+import randomstring from 'randomstring';
 // Socket.IO
-var socket = io.connect('http://192.168.1.177:3000');
-socket.on('news', function (data) {
-  console.log(data);
-  socket.emit('my other event', { my: 'data' });
+const socket = io.connect('http://192.168.1.177:3000');
+window.sokk = socket;
+socket.on('donors', function (donors) {
+  console.log(donors);
 });
 
 // ========================================================
